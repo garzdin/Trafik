@@ -36,11 +36,11 @@ class SearchBar extends Component {
 
   searchResults(text) {
     let encodedText = encodeURIComponent(text);
-    fetch(`https://maps.googleapis.com/maps/api/geocode/json?&address=${encodedText}&components=country:BG|locality:Pleven&language=bg`)
+    fetch(`http://localhost:3000/geocode?address=${encodedText}`)
     .then((response) => response.json())
     .then((responseJson) => {
       var results = [];
-      responseJson.results.forEach((result) => {
+      responseJson.forEach((result) => {
         results.push({
           'address': result.formatted_address,
           'location': results.geometry ? results.geometry.location : null
