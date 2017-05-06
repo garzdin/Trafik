@@ -74,6 +74,7 @@ class Initial extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <View style={styles.map}></View>
         <FavoritesModal
           visible={this.state.modalVisible}
           data={this.state.favoritesData}
@@ -99,9 +100,6 @@ class Initial extends Component {
               onSelect={this._onSelectSearchItem} />
           }
         </Animated.View>
-        <View style={styles.map}>
-
-        </View>
       </View>
     )
   }
