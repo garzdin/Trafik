@@ -37,8 +37,8 @@ class SearchBar extends Component {
       var results = [];
       responseJson.forEach((result) => {
         results.push({
-          'address': result.formatted_address,
-          'location': results.geometry ? results.geometry.location : null
+          address: result.formatted_address,
+          location: result.geometry.location
         });
       });
       this.props.onChangeResultsData(results);
