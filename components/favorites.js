@@ -36,7 +36,8 @@ class FavoritesModal extends Component {
       <Modal
         animationType={"slide"}
         transparent={true}
-        visible={this.props.visible}>
+        visible={this.props.visible}
+        onRequestClose={() => this.props.onRequestClose()}>
         <View style={styles.favoritesModal}>
           <ListView
             renderHeader={() => {
