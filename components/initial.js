@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 import {
-  Dimensions,
   StyleSheet,
+  Dimensions,
   View,
-  TextInput,
-  Text,
-  TouchableHighlight,
-  Image,
-  Modal,
   ListView,
   Animated
 } from 'react-native';
@@ -35,6 +30,7 @@ class Initial extends Component {
     this._onPressSearchItem = this._onPressSearchItem.bind(this);
     this._onSelectSearchItem = this._onSelectSearchItem.bind(this);
     this._onPressFavoriteItem = this._onPressFavoriteItem.bind(this);
+    this._closeModal = this._closeModal.bind(this);
   }
 
   openSearchResults() {
@@ -51,6 +47,10 @@ class Initial extends Component {
         toValue: 1
       }
     ).start()
+  }
+
+  _closeModal() {
+    this.setState({ modalVisible: false });
   }
 
   onChangeSearchResults(data) {
@@ -78,7 +78,11 @@ class Initial extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <FavoritesModal visible={this.state.modalVisible} data={this.state.favoritesData} onSelect={this._onPressFavoriteItem}/>
+        <FavoritesModal
+          visible={this.state.modalVisible}
+          data={this.state.favoritesData}
+          onSelect={this._onPressFavoriteItem}
+          onRequestClose={this._closeModal} />
         <Animated.View style={[
             {flex: this.state.headerHeight}, styles.header
           ]}>
@@ -101,6 +105,11 @@ const styles = StyleSheet.create({
     flex: 1
   },
   header: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: height / 6,
     backgroundColor: '#00B8FF',
     shadowColor: '#000000',
     shadowOffset: {
@@ -116,7 +125,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   map: {
-    flex: 5
+    position: 'absolute',
+    top: (height / 6) - 4,
+    left: 0,
+    right: 0,
+    bottom: 0
   }
 });
 
