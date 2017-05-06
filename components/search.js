@@ -6,9 +6,7 @@ import {
   Text,
   TouchableHighlight,
   Image,
-  Modal,
-  ListView,
-  Animated
+  ListView
 } from 'react-native';
 
 class SearchBar extends Component {
@@ -65,6 +63,7 @@ class SearchBar extends Component {
           <Image source={require('./assets/search.png')}/>
         </View>
         <TextInput
+          underlineColorAndroid='rgba(0,0,0,0)'
           value={this.props.value}
           style={styles.searchBox}
           placeholder="Where do you want to go?"
@@ -141,7 +140,7 @@ const styles = StyleSheet.create({
     flex: 10,
     height: 52,
     paddingLeft: 12,
-    fontSize: 14,
+    fontSize: 14
   },
   searchIcon: {
     flex: 1,
