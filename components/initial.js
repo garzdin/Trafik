@@ -18,39 +18,36 @@ class Initial extends Component {
     const searchDataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       modalVisible: false,
+      searchResultsVisible: false,
       favoritesData: favoritesDataSource.cloneWithRows(['32 West St., Philadelphia, Massachusetts', '41 West St., Philadelphia, Massachusetts', '321 Capitol Hill, Philadelphia, Massachusetts', 'Penndel St., Philadelphia, Massachusetts', 'Ann Borough Dr., Philadelphia, Massachusetts']),
       searchData: searchDataSource.cloneWithRows([]),
-      headerHeight: new Animated.Value(1),
+      headerHeight: new Animated.Value(height / 6),
       searchResultsValue: ""
     };
     this.openSearchResults = this.openSearchResults.bind(this);
     this.closeSearchResults = this.closeSearchResults.bind(this);
     this.onChangeSearchText = this.onChangeSearchText.bind(this);
     this.onChangeSearchResults = this.onChangeSearchResults.bind(this);
-    this._onPressSearchItem = this._onPressSearchItem.bind(this);
     this._onSelectSearchItem = this._onSelectSearchItem.bind(this);
     this._onPressFavoriteItem = this._onPressFavoriteItem.bind(this);
     this._closeModal = this._closeModal.bind(this);
   }
 
   openSearchResults() {
+    this.setState({ searchResultsVisible: true });
     Animated.timing(
       this.state.headerHeight, {
-        toValue: 10
+        toValue: height / 2
       }
-    ).start()
+    ).start();
   }
 
   closeSearchResults() {
     Animated.timing(
       this.state.headerHeight, {
-        toValue: 1
+        toValue: height / 6
       }
-    ).start()
-  }
-
-  _closeModal() {
-    this.setState({ modalVisible: false });
+    ).start((finished) => this.setState({ searchResultsVisible: finished ? false : true }));
   }
 
   onChangeSearchResults(data) {
@@ -61,17 +58,16 @@ class Initial extends Component {
     this.setState({ searchResultsValue: text });
   }
 
-  _onPressSearchItem(rowData) {
-    this.close();
-    this.setState({ searchResultsValue: rowData.address })
-  }
-
   _onSelectSearchItem(rowData) {
     this.closeSearchResults();
     this.setState({ searchResultsValue: rowData.address });
   }
 
   _onPressFavoriteItem(rowData) {
+    this.setState({ modalVisible: false });
+  }
+
+  _closeModal() {
     this.setState({ modalVisible: false });
   }
 
@@ -84,13 +80,24 @@ class Initial extends Component {
           onSelect={this._onPressFavoriteItem}
           onRequestClose={this._closeModal} />
         <Animated.View style={[
-            {flex: this.state.headerHeight}, styles.header
+            styles.header, {height: this.state.headerHeight}
           ]}>
           <View style={styles.headerRow}>
-            <SearchBar data={this.state.searchData} value={this.state.searchResultsValue} onChangeText={this.onChangeSearchText}  onChangeResultsData={this.onChangeSearchResults} open={this.openSearchResults} close={this.closeSearchResults} />
+            <SearchBar
+              visible={this.state.searchResultsVisible}
+              data={this.state.searchData}
+              value={this.state.searchResultsValue}
+              onChangeText={this.onChangeSearchText}
+              onChangeResultsData={this.onChangeSearchResults}
+              open={this.openSearchResults}
+              close={this.closeSearchResults} />
             <FavoritesButton onPress={() => this.setState({ modalVisible: true })} />
           </View>
-          <SearchResults data={this.state.searchData} onSelect={this._onSelectSearchItem} />
+          {this.state.searchResultsVisible &&
+            <SearchResults
+              data={this.state.searchData}
+              onSelect={this._onSelectSearchItem} />
+          }
         </Animated.View>
         <View style={styles.map}>
 
@@ -109,7 +116,6 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: height / 6,
     backgroundColor: '#00B8FF',
     shadowColor: '#000000',
     shadowOffset: {
