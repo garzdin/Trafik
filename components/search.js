@@ -19,16 +19,13 @@ class SearchBar extends Component {
   }
 
   _onSearchTextChange(text) {
-    this.props.onChangeText(text)
+    this.props.onChangeText(text);
     this.searchResults(text);
-    if (text.length <= 0) {
-      this.close()
-    } else {
-      if (this.props.data.getRowCount() > 0) {
-        this.open();
-      } else {
-        this.close()
-      }
+    if (text.length > 0 && !this.props.visible) {
+      this.open();
+    }
+    if (text.length <= 0 && this.props.visible) {
+      this.close();
     }
   }
 
