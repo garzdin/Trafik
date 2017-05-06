@@ -52,5 +52,7 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Please allow the application to track your location</string>
 </dict>
 </plist>
