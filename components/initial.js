@@ -31,6 +31,7 @@ class Initial extends Component {
     this._onSelectSearchItem = this._onSelectSearchItem.bind(this);
     this._onPressFavoriteItem = this._onPressFavoriteItem.bind(this);
     this._closeModal = this._closeModal.bind(this);
+    this.planRoute = this.planRoute.bind(this);
   }
 
   openSearchResults() {
@@ -61,6 +62,7 @@ class Initial extends Component {
   _onSelectSearchItem(rowData) {
     this.closeSearchResults();
     this.setState({ searchResultsValue: rowData.address });
+    this.planRoute(this.props.location, rowData.location);
   }
 
   _onPressFavoriteItem(rowData) {
@@ -69,6 +71,31 @@ class Initial extends Component {
 
   _closeModal() {
     this.setState({ modalVisible: false });
+  }
+
+  planRoute(origin, destination) {
+    fetch('http://localhost:3000/plan', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        start: {
+          latitude: origin.coords.latitude,
+          longitude: origin.coords.longitude
+        },
+        end: {
+          latitude: destination.lat,
+          longitude: destination.lng
+        },
+      })
+    })
+    .then((response) => response.json())
+    .then((responseJson) => console.log(responseJson))
+    .catch((error) => {
+      console.error(error);
+    });
   }
 
   render() {
